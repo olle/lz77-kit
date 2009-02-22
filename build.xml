@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (c) 2008-2009 Olle Törnström studiomediatech.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @author Olle Törnström olle[at]studiomediatech[dot]com
+ * @since 1.0
+ * @created 2009-02-19
+-->
+<project name="lz77-kit" default="build" basedir=".">
+
+	<description>
+		Tests and builds the project artifacts.
+		Builds to: ${build.dir}
+	</description>
+
+	<!-- PROPERTIES -->
+
+	<property name="build.dir" value="${basedir}/output" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="src.dir" value="${basedir}/src" />
+
+	<!-- MACROS -->
+
+	<macrodef name="jstest">
+		<attribute name="config" />
+		<sequential>
+			<java classname="org.mozilla.javascript.tools.shell.Main"
+			      classpath="${lib.dir}/java/rhino1_7R1/js.jar"
+			      fork="true"
+			      output="test-output.txt">
+				<arg value="${lib.dir}/sh/jstest.sh" />
+				<arg value="@{config}" />
+			</java>
+			<loadfile property="testresults" srcFile="test-output.txt" />
+			<delete file="test-output.txt" quiet="true" />
+			<fail message="Test failed: ${testresults}">
+				<condition>
+					<or>
+						<matches pattern="FAILURE"
+						         string="${testresults}"
+						         multiline="true" />
+					</or>
+				</condition>
+			</fail>
+			<echo>JSTest: OK</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="jslint">
+		<attribute name="files" />
+		<sequential>
+			<java classname="org.mozilla.javascript.tools.shell.Main"
+			      classpath="${lib.dir}/java/rhino1_7R1/js.jar"
+			      fork="true"
+			      output="lint-output.txt">
+				<arg value="${lib.dir}/sh/jslint.sh" />
+				<arg value="@{files}" />
+			</java>
+			<loadfile property="lintresults" srcFile="lint-output.txt" />
+			<delete file="lint-output.txt" quiet="true" />
+			<fail message="Lint failed: ${lintresults}">
+				<condition>
+					<matches pattern="Lint at"
+					         string="${lintresults}"
+					         multiline="true" />
+				</condition>
+			</fail>
+			<echo>JSLint: OK</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="phpunit">
+		<attribute name="testcase" />
+		<attribute name="file" />
+		<sequential>
+			<exec executable="php"
+			      searchpath="true"
+			      output="phpunit-output.txt">
+				<arg value="-d" />
+				<arg value="safe_mode=Off" />
+				<arg value="-d" />
+				<arg value="include_path=.:${src.dir}:${lib.dir}/php" />
+				<arg value="${lib.dir}/php/phpunit.php" />
+				<arg value="@{testcase}" />
+				<arg value="@{file}" />
+			</exec>
+			<loadfile property="phpunitresults" srcFile="phpunit-output.txt" />
+			<delete file="phpunit-output.txt" quiet="true" />
+			<fail message="PHPUnit failed: ${phpunitresults}">
+				<condition>
+					<or>
+						<matches pattern="FAILURES"
+						         string="${phpunitresults}" />
+						<matches pattern="Fatal error:"
+						         string="${phpunitresults}"
+						         multiline="true" />
+						<matches pattern="Parse error:"
+						         string="${phpunitresults}"
+						         multiline="true" />
+					</or>
+				</condition>
+			</fail>
+			<echo>PHPUnit: OK</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="junittest">
+		<sequential>
+			<mkdir dir="${basedir}/temp" />
+			<javac srcdir="${src.dir}/main/java:${src.dir}/test/java"
+			       destdir="${basedir}/temp">
+				<classpath>
+					<fileset dir="${lib.dir}/java">
+						<include name="**/*.jar" />
+					</fileset>
+				</classpath>
+			</javac>
+			<junit failureproperty="junitfail"
+			       haltonerror="no"
+			       haltonfailure="no">
+				<classpath>
+					<pathelement location="${basedir}/temp" />
+					<fileset dir="${lib.dir}/java">
+						<include name="**/*.jar" />
+					</fileset>
+				</classpath>
+				<test name="LZ77Test" outfile="junit-result">
+					<formatter type="plain" />
+				</test>
+			</junit>
+			<delete dir="${basedir}/temp" quiet="true" />
+			<loadfile property="junittestresults" srcFile="junit-result.txt" />
+			<delete file="junit-result.txt" quiet="true" />
+			<fail message="JUnit failed: ${junittestresults}" if="junitfail" />
+			<echo>JUnit: OK</echo>
+		</sequential>
+	</macrodef>
+
+	<!-- TARGETS -->
+
+	<target name="test" description="Runs the project unit tests">
+		<phpunit testcase="LZ77Test" file="${src.dir}/test/php/lz77Test.php" />
+		<jslint files="${src.dir}/main/js/lz77.js" />
+		<jstest config="${src.dir}/test/resources/jstests" />
+		<junittest />
+	</target>
+
+	<target name="build" depends="test" description="Builds the PHP artifacts">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.dir}/js" />
+		<mkdir dir="${build.dir}/php" />
+		<mkdir dir="${build.dir}/java" />
+		<taskdef name="jsmin"
+		         classname="net.matthaynes.jsmin.JSMin_Task"
+		         classpath="${lib.dir}/java/jsmin/jsmin.0.2.3.jar" />
+		<jsmin srcfile="${src.dir}/main/js/lz77.js"
+		       suffix="true"
+		       destdir="${build.dir}/js" />
+		<copy todir="${build.dir}/js" file="${src.dir}/main/js/lz77.js" />
+		<copy todir="${build.dir}/php" file="${src.dir}/main/php/lz77.php" />
+		<copy todir="${build.dir}/java" file="${src.dir}/main/java/LZ77.java" />
+	</target>
+
+	<target name="clean" description="Cleans and removes all built artifacts">
+		<delete dir="${build.dir}" />
+	</target>
+
+</project>
