@@ -154,6 +154,35 @@
 		</sequential>
 	</macrodef>
 
+	<macrodef name="pyunittest">
+		<sequential>
+			<mkdir dir="${basedir}/temp" />
+			<copy todir="${basedir}/temp">
+				<fileset file="${src.dir}/main/python/LZ77.py" />
+				<fileset file="${src.dir}/test/python/LZ77Test.py" />
+				<fileset file="${lib.dir}/python/unittest.py" />
+			</copy>
+			<exec executable="python"
+			      searchpath="true"
+			      output="pyunit-result.txt">
+				<arg value="${basedir}/temp/LZ77Test.py" />
+			</exec>
+			<delete dir="${basedir}/temp" quiet="true" />
+			<loadfile property="pyunittestresults"
+			          srcFile="pyunit-result.txt" />
+			<delete file="pyunit-result.txt" quiet="true" />
+			<fail message="JUnit failed: ${pyunittestresults}">
+				<condition>
+					<not>
+						<matches pattern="OK"
+						         string="${pyunittestresults}" />
+					</not>
+				</condition>
+			</fail>
+			<echo>PYUnit: OK</echo>
+		</sequential>
+	</macrodef>
+
 	<!-- TARGETS -->
 
 	<target name="test" description="Runs the project unit tests">
@@ -161,6 +190,7 @@
 		<jslint files="${src.dir}/main/js/lz77.js" />
 		<jstest config="${src.dir}/test/resources/jstests" />
 		<junittest />
+		<pyunittest />
 	</target>
 
 	<target name="build" depends="test" description="Builds the PHP artifacts">
@@ -168,6 +198,7 @@
 		<mkdir dir="${build.dir}/js" />
 		<mkdir dir="${build.dir}/php" />
 		<mkdir dir="${build.dir}/java" />
+		<mkdir dir="${build.dir}/python" />
 		<taskdef name="jsmin"
 		         classname="net.matthaynes.jsmin.JSMin_Task"
 		         classpath="${lib.dir}/java/jsmin/jsmin.0.2.3.jar" />
@@ -177,6 +208,7 @@
 		<copy todir="${build.dir}/js" file="${src.dir}/main/js/lz77.js" />
 		<copy todir="${build.dir}/php" file="${src.dir}/main/php/lz77.php" />
 		<copy todir="${build.dir}/java" file="${src.dir}/main/java/LZ77.java" />
+		<copy todir="${build.dir}/python" file="${src.dir}/main/python/LZ77.py" />
 	</target>
 
 	<target name="clean" description="Cleans and removes all built artifacts">
