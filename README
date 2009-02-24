@@ -1,0 +1,85 @@
+ * The MIT License
+ * 
+ * Copyright (c) 2009 Olle Törnström studiomediatech.com
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @author  Olle Törnström olle[at]studiomediatech[dot]com
+ * @created 2009-02-24
+ * @file    README lz77-kit
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ The lz77-kit is aimed at being another tool in the web-mans tool belt, enabling
+ a simple and very pragmatic compression utility for various languages. It's
+ perhaps not the sharpest compression-knife for heavy-duty cutting, but may
+ suite some craft(wo)mens needs.
+ 
+ This could be a simple way for you to throttle down on some of that bandwidth
+ usage, at least a few bytes or so. And a byte saved is a byte earned!
+ 
+ Features LZ77 implementations for the following languages:
+ 
+ 	- JavaScript
+ 	- PHP
+ 	- Python
+ 	- Java
+ 	
+ 	[A language missing? Please add it to the project.] 
+
+ USAGE
+ 
+ 	1. Get the project source code
+ 	2. Go to the project directory
+ 	3. Test and build using Ant on the comand line:
+ 	      
+ 	      shell$> ant      Tests and builds all
+ 	      
+ 	      shell$> ant -p   Shows some project information
+ 	      
+ 	4. Look in the ./output folder for built artifacts
+ 	5. Copy/paste what you need, but keep the license and credits please
+ 	
+ DEPENDENCIES
+ 
+ 	- Ant (tested with 1.7.x)
+ 	- PHP 5.x
+ 	- Java 1.5
+ 	- Python (tested with 2.6)
+ 	
+ 	- And a shell, with slashes "the right way" (/)
+
+ DEVELOPMENT
+
+ All source code have unit tests and the project is pretty independent and
+ should be easy for any developer, with a decent development environment, to 
+ check out and and start working with.
+ 
+ Guidelines:
+ 
+ 	- Try to keep the self-dependent structure, add libs and depends into
+ 	  the project but be _very_ sparse.
+ 	  
+ 	- Write tests and wire them to work with the Ant buildfile.
+ 	
+ 	- Keep implementations simple and open to copy/paste (e.g. no packages or
+ 	  namespaces if possible).
+ 	  
+ 	- Code with joy, not in anger!
+
+ With the hope of being of use to someone out there.
