@@ -1,6 +1,8 @@
 
 /*
- * Copyright (c) 2008-2009 Olle Törnström studiomediatech.com
+ * The MIT License
+ * 
+ * Copyright (c) 2009 Olle Törnström studiomediatech.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,12 +23,9 @@
  * THE SOFTWARE.
  *
  * CREDIT: Initially implemented by Diogo Kollross and made publicly available
- *         on the website http://www.geocities.com/diogok_br/lz77. Edited here
- *         to provide two flavours for JavaScript usage, either as standalone
- *         compressor/decompressor or as class for copy/paste use.
+ *         on the website http://www.geocities.com/diogok_br/lz77.
  */
  
-// ------[class copy start]------
 /**
  * This class provides simple LZ77 compression and decompression. 
  *
@@ -171,5 +170,3 @@ var LZ77 = function (settings) {
 		return decompressed;
 	};
 };
-// ------[end of class copy]-----
-

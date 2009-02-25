@@ -1,3 +1,29 @@
+#
+# The MIT License
+# 
+# Copyright (c) 2009 Olle Törnström studiomediatech.com
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#
+# CREDIT: From an initial implementation in Python by Diogo Kollross, made 
+#         publicly available on http://www.geocities.com/diogok_br/lz77.
+#
 class Compressor:
 	
 	def __init__(self):
@@ -13,6 +39,8 @@ class Compressor:
 		self.defaultWindowLength = 144
 		
 	def compress(self, data, windowLength = None):
+		"""Compresses text data using the LZ77 algorithm."""
+		
 		if windowLength == None:
 			windowLength = self.defaultWindowLength
 	
@@ -31,8 +59,8 @@ class Compressor:
 			
 			while (searchStart + matchLength) < pos:
 				
-				m1 = data[searchStart:searchStart + matchLength]
-				m2 = data[pos:pos + matchLength]
+				m1 = data[searchStart : searchStart + matchLength]
+				m2 = data[pos : pos + matchLength]
 				isValidMatch = (m1 == m2 and matchLength < self.maxStringLength)
 				
 				if isValidMatch:
@@ -64,6 +92,8 @@ class Compressor:
 		return compressed + data[pos:].replace("`", "``")
 	
 	def decompress(self, data):
+		"""Decompresses LZ77 compressed text data"""
+		
 		decompressed = ""
 		pos = 0
 		while pos < len(data):
@@ -74,11 +104,11 @@ class Compressor:
 			else:
 				nextChar = data[pos + 1]
 				if nextChar != self.referencePrefix:
-					distance = self.__decodeReferenceInt(data[pos + 1:pos + 3], 2)
+					distance = self.__decodeReferenceInt(data[pos + 1 : pos + 3], 2)
 					length = self.__decodeReferenceLength(data[pos + 3])
 					start = len(decompressed) - distance - length
 					end = start + length
-					decompressed += decompressed[start:end]
+					decompressed += decompressed[start : end]
 					pos += self.minStringLength - 1
 				else:
 					decompressed += self.referencePrefix
