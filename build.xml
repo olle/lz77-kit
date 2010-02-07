@@ -158,7 +158,7 @@
 		<sequential>
 			<mkdir dir="${basedir}/temp" />
 			<copy todir="${basedir}/temp">
-				<fileset file="${src.dir}/main/python/LZ77.py" />
+				<fileset file="${src.dir}/main/python/lz77.py" />
 				<fileset file="${src.dir}/test/python/LZ77Test.py" />
 				<fileset file="${lib.dir}/python/unittest.py" />
 			</copy>
@@ -232,6 +232,7 @@
 		<mkdir dir="${build.dir}/php" />
 		<mkdir dir="${build.dir}/java" />
 		<mkdir dir="${build.dir}/python" />
+		<mkdir dir="${build.dir}/ruby" />
 		<taskdef name="jsmin"
 		         classname="net.matthaynes.jsmin.JSMin_Task"
 		         classpath="${lib.dir}/java/jsmin/jsmin.0.2.3.jar" />
@@ -241,7 +242,8 @@
 		<copy todir="${build.dir}/js" file="${src.dir}/main/js/lz77.js" />
 		<copy todir="${build.dir}/php" file="${src.dir}/main/php/lz77.php" />
 		<copy todir="${build.dir}/java" file="${src.dir}/main/java/LZ77.java" />
-		<copy todir="${build.dir}/python" file="${src.dir}/main/python/LZ77.py" />
+		<copy todir="${build.dir}/python" file="${src.dir}/main/python/lz77.py" />
+		<copy todir="${build.dir}/ruby" file="${src.dir}/main/ruby/lz77.rb" />
 	</target>
 
 	<target name="clean" description="Cleans and removes all built artifacts">
