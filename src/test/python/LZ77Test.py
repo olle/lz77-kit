@@ -1,5 +1,5 @@
 import unittest
-from LZ77 import Compressor
+from lz77 import Compressor
 
 class LZ77Test(unittest.TestCase):
     def setUp(self):

@@ -1,4 +1,5 @@
 # coding=utf8
+#
 # The MIT License
 # 
 # Copyright (c) 2009 Olle Törnström studiomediatech.com
