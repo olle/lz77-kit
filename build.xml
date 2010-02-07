@@ -171,7 +171,7 @@
 			<loadfile property="pyunittestresults"
 			          srcFile="pyunit-result.txt" />
 			<delete file="pyunit-result.txt" quiet="true" />
-			<fail message="JUnit failed: ${pyunittestresults}">
+			<fail message="PYUnit failed: ${pyunittestresults}">
 				<condition>
 					<not>
 						<matches pattern="OK"
@@ -182,8 +182,40 @@
 			<echo>PYUnit: OK</echo>
 		</sequential>
 	</macrodef>
+	
+	<macrodef name="rubyunittest">
+		<sequential>
+			<mkdir dir="${basedir}/temp" />
+			<copy todir="${basedir}/temp">
+				<fileset file="${src.dir}/main/ruby/lz77.rb" />
+				<fileset file="${src.dir}/test/ruby/lz77test.rb" />
+			</copy>
+			<exec executable="ruby"
+			      searchpath="true"
+			      output="rubyunit-result.txt">
+				<arg value="${basedir}/temp/lz77test.rb" />
+			</exec>
+			<delete dir="${basedir}/temp" quiet="true" />
+			<loadfile property="rubyunittestresults"
+			          srcFile="rubyunit-result.txt" />
+			<delete file="rubyunit-result.txt" quiet="true" />
+			<fail message="Ruby unit-test failed: ${rubyunittestresults}">
+				<condition>
+					<not>
+						<matches pattern="OK"
+						         string="${rubyunittestresults}" />
+					</not>
+				</condition>
+			</fail>
+			<echo>Ruby unit-tests: OK</echo>
+		</sequential>
+	</macrodef>
 
 	<!-- TARGETS -->
+	
+	<target name="rbtest">
+		<rubyunittest />
+	</target>
 
 	<target name="test" description="Runs the project unit tests">
 		<phpunit testcase="LZ77Test" file="${src.dir}/test/php/lz77Test.php" />
@@ -191,6 +223,7 @@
 		<jstest config="${src.dir}/test/resources/jstests" />
 		<junittest />
 		<pyunittest />
+		<rubyunittest />
 	</target>
 
 	<target name="build" depends="test" description="Builds the PHP artifacts">
