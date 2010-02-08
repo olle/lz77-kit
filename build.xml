@@ -202,21 +202,17 @@
 			<fail message="Ruby unit-test failed: ${rubyunittestresults}">
 				<condition>
 					<not>
-						<matches pattern="OK"
+						<matches pattern="0 failures, 0 errors"
 						         string="${rubyunittestresults}" />
 					</not>
 				</condition>
 			</fail>
-			<echo>Ruby unit-tests: OK</echo>
+			<echo>Ruby Unit Test: OK</echo>
 		</sequential>
 	</macrodef>
 
 	<!-- TARGETS -->
 	
-	<target name="rbtest">
-		<rubyunittest />
-	</target>
-
 	<target name="test" description="Runs the project unit tests">
 		<phpunit testcase="LZ77Test" file="${src.dir}/test/php/lz77Test.php" />
 		<jslint files="${src.dir}/main/js/lz77.js" />

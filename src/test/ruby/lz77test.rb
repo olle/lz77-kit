@@ -9,10 +9,12 @@ class LZ77Test < Test::Unit::TestCase
 	end
 
 	def testCompress
-		assert_equal(@encodedTextData, @compressor.compress(@textData))
+		result = @compressor.compress(@textData)
+		assert_equal(@encodedTextData, result)
 	end
 	
 	def testDecompress
-		assert_equal(@textData, @compressor.decompress(@encodedTextData))
+		result = @compressor.decompress(@encodedTextData)
+		assert_equal(@textData, result)
 	end
 end

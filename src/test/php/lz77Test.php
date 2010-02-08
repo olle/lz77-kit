@@ -9,7 +9,6 @@ class LZ77Test extends PHPUnit_Framework_TestCase {
 	protected $encodedTextData = "ababassbabasbabbba` '&bs` 1 sb` 4!` . abaaaa` *!";
 
 	protected function setUp() {
-
 		$this->compressor = new LZ77();
 	}
 
@@ -27,4 +26,5 @@ class LZ77Test extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->textData, $result);
 	}
 }
+
 ?>
