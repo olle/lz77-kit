@@ -40,6 +40,7 @@
  	- Python
  	- Java
  	- Ruby
+	- Erlang
  	
  	[A language missing? Please add it to the project.] 
 
@@ -62,6 +63,7 @@
  	- PHP 5.x
  	- Java 1.5
  	- Python (tested with 2.6)
+	- Erlang (tested with R14B)
  	
  	- And a shell, with slashes "the right way" (/)
 

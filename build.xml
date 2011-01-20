@@ -60,7 +60,7 @@
 					</or>
 				</condition>
 			</fail>
-			<echo>JSTest: OK</echo>
+			<echo>-----> JSTest: OK</echo>
 		</sequential>
 	</macrodef>
 
@@ -83,7 +83,7 @@
 					         multiline="true" />
 				</condition>
 			</fail>
-			<echo>JSLint: OK</echo>
+			<echo>-----> JSLint: OK</echo>
 		</sequential>
 	</macrodef>
 
@@ -118,7 +118,7 @@
 					</or>
 				</condition>
 			</fail>
-			<echo>PHPUnit: OK</echo>
+			<echo>-----> PHPUnit: OK</echo>
 		</sequential>
 	</macrodef>
 
@@ -150,7 +150,7 @@
 			<loadfile property="junittestresults" srcFile="junit-result.txt" />
 			<delete file="junit-result.txt" quiet="true" />
 			<fail message="JUnit failed: ${junittestresults}" if="junitfail" />
-			<echo>JUnit: OK</echo>
+			<echo>-----> JUnit: OK</echo>
 		</sequential>
 	</macrodef>
 
@@ -179,7 +179,7 @@
 					</not>
 				</condition>
 			</fail>
-			<echo>PYUnit: OK</echo>
+			<echo>-----> PYUnit: OK</echo>
 		</sequential>
 	</macrodef>
 	
@@ -207,7 +207,36 @@
 					</not>
 				</condition>
 			</fail>
-			<echo>Ruby Unit Test: OK</echo>
+			<echo>-----> Ruby Unit Test: OK</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="eunittest">
+		<sequential>
+			<mkdir dir="${basedir}/temp" />
+			<copy todir="${basedir}/temp">
+				<fileset file="${src.dir}/main/erlang/lz77.erl" />
+				<fileset file="${src.dir}/test/erlang/lz77_test.erl" />
+			</copy>
+			<exec executable="${lib.dir}/erlang/erlc.escript"
+			      searchpath="true"
+			      dir="${basedir}/temp" />
+			<exec executable="${lib.dir}/erlang/eunit.escript"
+			      searchpath="true"
+			      dir="${basedir}/temp">
+			      <arg value="eunit-result.txt" />
+			</exec>
+			<loadfile property="eunittestresults" srcFile="${basedir}/temp/eunit-result.txt" failonerror="false" />
+			<delete dir="${basedir}/temp" quiet="true" />
+			<fail message="Eunit-tests failed: ${eunittestresults}">
+				<condition>
+					<not>
+						<matches pattern="All tests ok"
+						         string="${eunittestresults}" />
+					</not>
+				</condition>
+			</fail>
+			<echo>-----> Eunit: OK</echo>
 		</sequential>
 	</macrodef>
 
@@ -219,7 +248,8 @@
 		<jstest config="${src.dir}/test/resources/jstests" />
 		<junittest />
 		<pyunittest />
-		<rubyunittest />
+		<rubyunittest />		
+		<eunittest />
 	</target>
 
 	<target name="build" depends="test" description="Builds the PHP artifacts">
