@@ -126,7 +126,7 @@
 		<sequential>
 			<mkdir dir="${basedir}/temp" />
 			<javac srcdir="${src.dir}/main/java:${src.dir}/test/java"
-			       destdir="${basedir}/temp">
+			       destdir="${basedir}/temp" includeAntRuntime="false">
 				<classpath>
 					<fileset dir="${lib.dir}/java">
 						<include name="**/*.jar" />
@@ -226,7 +226,7 @@
 			      dir="${basedir}/temp">
 			      <arg value="eunit-result.txt" />
 			</exec>
-			<loadfile property="eunittestresults" srcFile="${basedir}/temp/eunit-result.txt" failonerror="false" />
+			<loadfile property="eunittestresults" srcfile="${basedir}/temp/eunit-result.txt" failonerror="false" />
 			<delete dir="${basedir}/temp" quiet="true" />
 			<fail message="Eunit-tests failed: ${eunittestresults}">
 				<condition>
