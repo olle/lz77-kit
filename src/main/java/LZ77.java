@@ -64,6 +64,17 @@ public class LZ77 {
 		maxWindowLength = maxStringDistance + minStringLength;
 	}
 
+
+	// LAZY STATIC METHODS - ADDED BY: DAN!
+	public static String compressStr(String data) {
+		LZ77 lz = new LZ77();
+		return lz.compress(data, null);
+	}
+	public static String decompressStr(String data) {
+		LZ77 lz = new LZ77();
+		return lz.decompress(data);
+	}
+
 	// PUBLIC METHODS
 
 	/**
