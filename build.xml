@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!--
  * Copyright (c) 2008-2009 Olle Törnström studiomediatech.com
  *
@@ -11,7 +11,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,254 +26,261 @@
 -->
 <project name="lz77-kit" default="build" basedir=".">
 
-	<description>
-		Tests and builds the project artifacts.
-		Builds to: ${build.dir}
-	</description>
+  <description>
+    Tests and builds the project artifacts. Builds to: ${build.dir}
+  </description>
 
-	<!-- PROPERTIES -->
+  <!-- PROPERTIES -->
 
-	<property name="build.dir" value="${basedir}/output" />
-	<property name="lib.dir" value="${basedir}/lib" />
-	<property name="src.dir" value="${basedir}/src" />
+  <property name="build.dir" value="${basedir}/output" />
+  <property name="lib.dir" value="${basedir}/lib" />
+  <property name="src.dir" value="${basedir}/src" />
 
-	<!-- MACROS -->
+  <!-- MACROS -->
 
-	<macrodef name="jstest">
-		<attribute name="config" />
-		<sequential>
-			<java classname="org.mozilla.javascript.tools.shell.Main"
-			      classpath="${lib.dir}/java/rhino1_7R1/js.jar"
-			      fork="true"
-			      output="test-output.txt">
-				<arg value="${lib.dir}/sh/jstest.sh" />
-				<arg value="@{config}" />
-			</java>
-			<loadfile property="testresults" srcFile="test-output.txt" />
-			<delete file="test-output.txt" quiet="true" />
-			<fail message="Test failed: ${testresults}">
-				<condition>
-					<or>
-						<matches pattern="FAILURE"
-						         string="${testresults}"
-						         multiline="true" />
-					</or>
-				</condition>
-			</fail>
-			<echo>-----> JSTest: OK</echo>
-		</sequential>
-	</macrodef>
+  <macrodef name="jstest">
+    <attribute name="config" />
+    <sequential>
+      <java classname="org.mozilla.javascript.tools.shell.Main" classpath="${lib.dir}/java/rhino1_7R1/js.jar" fork="true" output="test-output.txt">
+        <arg value="${lib.dir}/sh/jstest.sh" />
+        <arg value="@{config}" />
+      </java>
+      <loadfile property="testresults" srcFile="test-output.txt" />
+      <delete file="test-output.txt" quiet="true" />
+      <fail message="Test failed: ${testresults}">
+        <condition>
+          <or>
+            <matches pattern="FAILURE" string="${testresults}" multiline="true" />
+          </or>
+        </condition>
+      </fail>
+      <echo>-----> JSTest: OK</echo>
+    </sequential>
+  </macrodef>
 
-	<macrodef name="jslint">
-		<attribute name="files" />
-		<sequential>
-			<java classname="org.mozilla.javascript.tools.shell.Main"
-			      classpath="${lib.dir}/java/rhino1_7R1/js.jar"
-			      fork="true"
-			      output="lint-output.txt">
-				<arg value="${lib.dir}/sh/jslint.sh" />
-				<arg value="@{files}" />
-			</java>
-			<loadfile property="lintresults" srcFile="lint-output.txt" />
-			<delete file="lint-output.txt" quiet="true" />
-			<fail message="Lint failed: ${lintresults}">
-				<condition>
-					<matches pattern="Lint at"
-					         string="${lintresults}"
-					         multiline="true" />
-				</condition>
-			</fail>
-			<echo>-----> JSLint: OK</echo>
-		</sequential>
-	</macrodef>
+  <macrodef name="jslint">
+    <attribute name="files" />
+    <sequential>
+      <java classname="org.mozilla.javascript.tools.shell.Main" classpath="${lib.dir}/java/rhino1_7R1/js.jar" fork="true" output="lint-output.txt">
+        <arg value="${lib.dir}/sh/jslint.sh" />
+        <arg value="@{files}" />
+      </java>
+      <loadfile property="lintresults" srcFile="lint-output.txt" />
+      <delete file="lint-output.txt" quiet="true" />
+      <fail message="Lint failed: ${lintresults}">
+        <condition>
+          <matches pattern="Lint at" string="${lintresults}" multiline="true" />
+        </condition>
+      </fail>
+      <echo>-----> JSLint: OK</echo>
+    </sequential>
+  </macrodef>
 
-	<macrodef name="phpunit">
-		<attribute name="testcase" />
-		<attribute name="file" />
-		<sequential>
-			<exec executable="php"
-			      searchpath="true"
-			      output="phpunit-output.txt">
-				<arg value="-d" />
-				<arg value="safe_mode=Off" />
-				<arg value="-d" />
-				<arg value="include_path=.:${src.dir}:${lib.dir}/php" />
-				<arg value="${lib.dir}/php/phpunit.php" />
-				<arg value="@{testcase}" />
-				<arg value="@{file}" />
-			</exec>
-			<loadfile property="phpunitresults" srcFile="phpunit-output.txt" />
-			<delete file="phpunit-output.txt" quiet="true" />
-			<fail message="PHPUnit failed: ${phpunitresults}">
-				<condition>
-					<or>
-						<matches pattern="FAILURES"
-						         string="${phpunitresults}" />
-						<matches pattern="Fatal error:"
-						         string="${phpunitresults}"
-						         multiline="true" />
-						<matches pattern="Parse error:"
-						         string="${phpunitresults}"
-						         multiline="true" />
-					</or>
-				</condition>
-			</fail>
-			<echo>-----> PHPUnit: OK</echo>
-		</sequential>
-	</macrodef>
+  <macrodef name="phpunit">
+    <attribute name="testcase" />
+    <attribute name="file" />
+    <sequential>
+      <exec executable="php" searchpath="true" output="phpunit-output.txt">
+        <arg value="-d" />
+        <arg value="safe_mode=Off" />
+        <arg value="-d" />
+        <arg value="include_path=.:${src.dir}:${lib.dir}/php" />
+        <arg value="${lib.dir}/php/phpunit.php" />
+        <arg value="@{testcase}" />
+        <arg value="@{file}" />
+      </exec>
+      <loadfile property="phpunitresults" srcFile="phpunit-output.txt" />
+      <delete file="phpunit-output.txt" quiet="true" />
+      <fail message="PHPUnit failed: ${phpunitresults}">
+        <condition>
+          <or>
+            <matches pattern="FAILURES" string="${phpunitresults}" />
+            <matches pattern="Fatal error:" string="${phpunitresults}" multiline="true" />
+            <matches pattern="Parse error:" string="${phpunitresults}" multiline="true" />
+          </or>
+        </condition>
+      </fail>
+      <echo>-----> PHPUnit: OK</echo>
+    </sequential>
+  </macrodef>
 
-	<macrodef name="junittest">
-		<sequential>
-			<mkdir dir="${basedir}/temp" />
-			<javac srcdir="${src.dir}/main/java:${src.dir}/test/java"
-			       destdir="${basedir}/temp" includeAntRuntime="false">
-				<classpath>
-					<fileset dir="${lib.dir}/java">
-						<include name="**/*.jar" />
-					</fileset>
-				</classpath>
-			</javac>
-			<junit failureproperty="junitfail"
-			       haltonerror="no"
-			       haltonfailure="no">
-				<classpath>
-					<pathelement location="${basedir}/temp" />
-					<fileset dir="${lib.dir}/java">
-						<include name="**/*.jar" />
-					</fileset>
-				</classpath>
-				<test name="LZ77Test" outfile="junit-result">
-					<formatter type="plain" />
-				</test>
-			</junit>
-			<delete dir="${basedir}/temp" quiet="true" />
-			<loadfile property="junittestresults" srcFile="junit-result.txt" />
-			<delete file="junit-result.txt" quiet="true" />
-			<fail message="JUnit failed: ${junittestresults}" if="junitfail" />
-			<echo>-----> JUnit: OK</echo>
-		</sequential>
-	</macrodef>
+  <macrodef name="junittest">
+    <sequential>
+      <mkdir dir="${basedir}/temp" />
+      <javac srcdir="${src.dir}/main/java:${src.dir}/test/java" destdir="${basedir}/temp" includeAntRuntime="false">
+        <classpath>
+          <fileset dir="${lib.dir}/java">
+            <include name="**/*.jar" />
+          </fileset>
+        </classpath>
+      </javac>
+      <junit failureproperty="junitfail" haltonerror="no" haltonfailure="no">
+        <classpath>
+          <pathelement location="${basedir}/temp" />
+          <fileset dir="${lib.dir}/java">
+            <include name="**/*.jar" />
+          </fileset>
+        </classpath>
+        <test name="LZ77Test" outfile="junit-result">
+          <formatter type="plain" />
+        </test>
+      </junit>
+      <delete dir="${basedir}/temp" quiet="true" />
+      <loadfile property="junittestresults" srcFile="junit-result.txt" />
+      <delete file="junit-result.txt" quiet="true" />
+      <fail message="JUnit failed: ${junittestresults}" if="junitfail" />
+      <echo>-----> JUnit: OK</echo>
+    </sequential>
+  </macrodef>
 
-	<macrodef name="pyunittest">
-		<sequential>
-			<mkdir dir="${basedir}/temp" />
-			<copy todir="${basedir}/temp">
-				<fileset file="${src.dir}/main/python/lz77.py" />
-				<fileset file="${src.dir}/test/python/LZ77Test.py" />
-				<fileset file="${lib.dir}/python/unittest.py" />
-			</copy>
-			<exec executable="python"
-			      searchpath="true"
-			      output="pyunit-result.txt">
-				<arg value="${basedir}/temp/LZ77Test.py" />
-			</exec>
-			<delete dir="${basedir}/temp" quiet="true" />
-			<loadfile property="pyunittestresults"
-			          srcFile="pyunit-result.txt" />
-			<delete file="pyunit-result.txt" quiet="true" />
-			<fail message="PYUnit failed: ${pyunittestresults}">
-				<condition>
-					<not>
-						<matches pattern="OK"
-						         string="${pyunittestresults}" />
-					</not>
-				</condition>
-			</fail>
-			<echo>-----> PYUnit: OK</echo>
-		</sequential>
-	</macrodef>
-	
-	<macrodef name="rubyunittest">
-		<sequential>
-			<mkdir dir="${basedir}/temp" />
-			<copy todir="${basedir}/temp">
-				<fileset file="${src.dir}/main/ruby/lz77.rb" />
-				<fileset file="${src.dir}/test/ruby/lz77test.rb" />
-			</copy>
-			<exec executable="ruby"
-			      searchpath="true"
-			      output="rubyunit-result.txt">
-				<arg value="${basedir}/temp/lz77test.rb" />
-			</exec>
-			<delete dir="${basedir}/temp" quiet="true" />
-			<loadfile property="rubyunittestresults"
-			          srcFile="rubyunit-result.txt" />
-			<delete file="rubyunit-result.txt" quiet="true" />
-			<fail message="Ruby unit-test failed: ${rubyunittestresults}">
-				<condition>
-					<not>
-						<matches pattern="0 failures, 0 errors"
-						         string="${rubyunittestresults}" />
-					</not>
-				</condition>
-			</fail>
-			<echo>-----> Ruby Unit Test: OK</echo>
-		</sequential>
-	</macrodef>
+  <macrodef name="pyunittest">
+    <sequential>
+      <mkdir dir="${basedir}/temp" />
+      <copy todir="${basedir}/temp">
+        <fileset file="${src.dir}/main/python/lz77.py" />
+        <fileset file="${src.dir}/test/python/LZ77Test.py" />
+        <fileset file="${lib.dir}/python/unittest.py" />
+      </copy>
+      <exec executable="python" searchpath="true" output="pyunit-result.txt">
+        <arg value="${basedir}/temp/LZ77Test.py" />
+      </exec>
+      <delete dir="${basedir}/temp" quiet="true" />
+      <loadfile property="pyunittestresults" srcFile="pyunit-result.txt" />
+      <delete file="pyunit-result.txt" quiet="true" />
+      <fail message="PYUnit failed: ${pyunittestresults}">
+        <condition>
+          <not>
+            <matches pattern="OK" string="${pyunittestresults}" />
+          </not>
+        </condition>
+      </fail>
+      <echo>-----> PYUnit: OK</echo>
+    </sequential>
+  </macrodef>
 
-	<macrodef name="eunittest">
-		<sequential>
-			<mkdir dir="${basedir}/temp" />
-			<copy todir="${basedir}/temp">
-				<fileset file="${src.dir}/main/erlang/lz77.erl" />
-				<fileset file="${src.dir}/test/erlang/lz77_test.erl" />
-			</copy>
-			<exec executable="${lib.dir}/erlang/erlc.escript"
-			      searchpath="true"
-			      dir="${basedir}/temp" />
-			<exec executable="${lib.dir}/erlang/eunit.escript"
-			      searchpath="true"
-			      dir="${basedir}/temp">
-			      <arg value="eunit-result.txt" />
-			</exec>
-			<loadfile property="eunittestresults" srcfile="${basedir}/temp/eunit-result.txt" failonerror="false" />
-			<delete dir="${basedir}/temp" quiet="true" />
-			<fail message="Eunit-tests failed: ${eunittestresults}">
-				<condition>
-					<not>
-						<matches pattern="All tests ok"
-						         string="${eunittestresults}" />
-					</not>
-				</condition>
-			</fail>
-			<echo>-----> Eunit: OK</echo>
-		</sequential>
-	</macrodef>
+  <macrodef name="rubyunittest">
+    <sequential>
+      <mkdir dir="${basedir}/temp" />
+      <copy todir="${basedir}/temp">
+        <fileset file="${src.dir}/main/ruby/lz77.rb" />
+        <fileset file="${src.dir}/test/ruby/lz77test.rb" />
+      </copy>
+      <exec executable="ruby" searchpath="true" output="rubyunit-result.txt">
+        <arg value="${basedir}/temp/lz77test.rb" />
+      </exec>
+      <delete dir="${basedir}/temp" quiet="true" />
+      <loadfile property="rubyunittestresults" srcFile="rubyunit-result.txt" />
+      <delete file="rubyunit-result.txt" quiet="true" />
+      <fail message="Ruby unit-test failed: ${rubyunittestresults}">
+        <condition>
+          <not>
+            <matches pattern="0 failures, 0 errors" string="${rubyunittestresults}" />
+          </not>
+        </condition>
+      </fail>
+      <echo>-----> Ruby Unit Test: OK</echo>
+    </sequential>
+  </macrodef>
 
-	<!-- TARGETS -->
-	
-	<target name="test" description="Runs the project unit tests">
-		<phpunit testcase="LZ77Test" file="${src.dir}/test/php/lz77Test.php" />
-		<jslint files="${src.dir}/main/js/lz77.js" />
-		<jstest config="${src.dir}/test/resources/jstests" />
-		<junittest />
-		<pyunittest />
-		<rubyunittest />		
-		<eunittest />
-	</target>
+  <macrodef name="eunittest">
+    <sequential>
+      <mkdir dir="${basedir}/temp" />
+      <copy todir="${basedir}/temp">
+        <fileset file="${src.dir}/main/erlang/lz77.erl" />
+        <fileset file="${src.dir}/test/erlang/lz77_test.erl" />
+      </copy>
+      <exec executable="${lib.dir}/erlang/erlc.escript" searchpath="true" dir="${basedir}/temp" />
+      <exec executable="${lib.dir}/erlang/eunit.escript" searchpath="true" dir="${basedir}/temp">
+        <arg value="eunit-result.txt" />
+      </exec>
+      <loadfile property="eunittestresults" srcfile="${basedir}/temp/eunit-result.txt" failonerror="false" />
+      <delete dir="${basedir}/temp" quiet="true" />
+      <fail message="Eunit-tests failed: ${eunittestresults}">
+        <condition>
+          <not>
+            <matches pattern="All tests ok" string="${eunittestresults}" />
+          </not>
+        </condition>
+      </fail>
+      <echo>-----> Eunit: OK</echo>
+    </sequential>
+  </macrodef>
 
-	<target name="build" depends="test" description="Builds the PHP artifacts">
-		<mkdir dir="${build.dir}" />
-		<mkdir dir="${build.dir}/js" />
-		<mkdir dir="${build.dir}/php" />
-		<mkdir dir="${build.dir}/java" />
-		<mkdir dir="${build.dir}/python" />
-		<mkdir dir="${build.dir}/ruby" />
-		<taskdef name="jsmin"
-		         classname="net.matthaynes.jsmin.JSMin_Task"
-		         classpath="${lib.dir}/java/jsmin/jsmin.0.2.3.jar" />
-		<jsmin srcfile="${src.dir}/main/js/lz77.js"
-		       suffix="true"
-		       destdir="${build.dir}/js" />
-		<copy todir="${build.dir}/js" file="${src.dir}/main/js/lz77.js" />
-		<copy todir="${build.dir}/php" file="${src.dir}/main/php/lz77.php" />
-		<copy todir="${build.dir}/java" file="${src.dir}/main/java/LZ77.java" />
-		<copy todir="${build.dir}/python" file="${src.dir}/main/python/lz77.py" />
-		<copy todir="${build.dir}/ruby" file="${src.dir}/main/ruby/lz77.rb" />
-	</target>
+  <!-- TEST TARGETS -->
 
-	<target name="clean" description="Cleans and removes all built artifacts">
-		<delete dir="${build.dir}" />
-	</target>
+  <target name="test-ruby" description="Tests the Ruby implementation">
+    <rubyunittest />
+  </target>
+
+  <target name="test-python" description="Tests the Python implementation">
+    <pyunittest />
+  </target>
+
+  <target name="test-php" description="Tests the PHP implementation">
+    <phpunit testcase="LZ77Test" file="${src.dir}/test/php/lz77Test.php" />
+  </target>
+
+  <target name="test-js" description="Tests the JavaScript implementation">
+    <jslint files="${src.dir}/main/js/lz77.js" />
+    <jstest config="${src.dir}/test/resources/jstests" />
+  </target>
+
+  <target name="test-java" description="Tests the Java implementation">
+    <junittest />
+  </target>
+
+  <target name="test-erlang" description="Tests the Erlang implementation">
+    <eunittest />
+  </target>
+
+  <target name="test" description="Runs the project unit tests" depends="test-ruby,test-python,test-php,test-js,test-java,test-erlang" />
+
+  <!-- BUILD TARGETS -->
+
+  <target name="build-ruby" depends="test-ruby" description="Builds the Ruby artifacts">
+    <mkdir dir="${build.dir}/ruby" />
+    <copy todir="${build.dir}/ruby" file="${src.dir}/main/ruby/lz77.rb" />
+  </target>
+
+  <target name="build-python" depends="test-python" description="Builds the Pyhton artifacts">
+    <mkdir dir="${build.dir}/python" />
+    <copy todir="${build.dir}/python" file="${src.dir}/main/python/lz77.py" />
+  </target>
+
+  <target name="build-js" depends="test-js" description="Builds the JavaScript artifacts">
+    <mkdir dir="${build.dir}/js" />
+    <taskdef name="jsmin" classname="net.matthaynes.jsmin.JSMin_Task" classpath="${lib.dir}/java/jsmin/jsmin.0.2.3.jar" />
+    <jsmin srcfile="${src.dir}/main/js/lz77.js" suffix="true" destdir="${build.dir}/js" />
+    <copy todir="${build.dir}/js" file="${src.dir}/main/js/lz77.js" />
+  </target>
+
+  <target name="build-php" depends="test-php" description="Builds the PHP artifacts">
+    <mkdir dir="${build.dir}/php" />
+    <copy todir="${build.dir}/php" file="${src.dir}/main/php/lz77.php" />
+  </target>
+
+  <target name="build-java" depends="test-java" description="Builds the Java artifacts">
+    <mkdir dir="${build.dir}/java" />
+    <copy todir="${build.dir}/java" file="${src.dir}/main/java/LZ77.java" />
+  </target>
+
+  <target name="build-erlang" depends="test-erlang" description="Builds the Erlang artifacts">
+    <mkdir dir="${build.dir}/erlang" />
+    <copy todir="${build.dir}/erlang" file="${src.dir}/erlang/lz77.erl" />
+  </target>
+
+  <target name="build" description="Builds all the artifacts">
+    <mkdir dir="${build.dir}" />
+    <antcall target="build-ruby" />
+    <antcall target="build-python" />
+    <antcall target="build-js" />
+    <antcall target="build-php" />
+    <antcall target="build-java" />
+    <!-- TODO: Fix impl antcall target="build-erlang" / -->
+  </target>
+
+  <target name="clean" description="Cleans and removes all built artifacts">
+    <delete dir="${build.dir}" />
+  </target>
 
 </project>
