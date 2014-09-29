@@ -276,7 +276,7 @@
     <antcall target="build-js" />
     <antcall target="build-php" />
     <antcall target="build-java" />
-    <!-- TODO: Fix impl antcall target="build-erlang" / -->
+    <antcall target="build-erlang" />
   </target>
 
   <target name="clean" description="Cleans and removes all built artifacts">
