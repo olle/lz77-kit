@@ -1,5 +1,5 @@
 # The MIT License
-# 
+#
 # Copyright (c) 2010 Olle Törnström studiomediatech.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -11,7 +11,7 @@
 #
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,9 +27,9 @@ class Compressor
 
 	def initialize
 		@referencePrefix = "`"
-	    @referencePrefixCode = @referencePrefix[0]
+	  @referencePrefixCode = @referencePrefix[0]
 		@referenceIntBase = 96
-		@referenceIntFloorCode = " "[0]
+		@referenceIntFloorCode = " ".ord
 		@referenceIntCeilCode = @referenceIntFloorCode + @referenceIntBase - 1
 		@maxStringDistance = @referenceIntBase ** 2 - 1
 		@minStringLength = 5
@@ -86,14 +86,14 @@ class Compressor
 		end
 		return compressed + data[pos..-1].gsub(/`/, "``")
 	end
-	
+
 	def decompress(data)
 		decompressed = ""
 		pos = 0
 		while pos < data.length do
 			currentChar = data[pos, 1]
 			if currentChar != @referencePrefix then
-				decompressed << currentChar				
+				decompressed << currentChar
 				pos += 1
 			else
 				nextChar = data[pos + 1, 1]
@@ -112,7 +112,7 @@ class Compressor
 		end
 		return decompressed
 	end
-	
+
 	private # PRIVATE METHODS **************************************************
 
 	def encodeReferenceInt(value, width)
@@ -123,7 +123,7 @@ class Compressor
 				value = value / @referenceIntBase
 			end
 			missingLength = width - encoded.length
-			(0..missingLength-1).each do
+			(0..missingLength - 1).each do
 				encoded = (@referenceIntFloorCode).chr << encoded
 			end
 			return encoded
@@ -135,12 +135,14 @@ class Compressor
 	def encodeReferenceLength(length)
 		return encodeReferenceInt(length - @minStringLength, 1)
 	end
-	
+
 	def decodeReferenceInt(data, width)
 		value = 0
-		(0..width-1).each do |i|
-			value *= @referenceIntBase			
-			charCode = data[i]
+		(0..width - 1).each do |i|
+			value *= @referenceIntBase
+			char = data[i]
+			charCode = char.ord
+			print "#{char} => #{charCode}"
 			if charCode >= @referenceIntFloorCode and charCode <= @referenceIntCeilCode then
 				value += (charCode - @referenceIntFloorCode)
 			else
@@ -153,5 +155,5 @@ class Compressor
 	def decodeReferenceLength(data)
 		return decodeReferenceInt(data, 1) + @minStringLength
 	end
-	
+
 end

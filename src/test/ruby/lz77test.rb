@@ -1,5 +1,5 @@
 require 'test/unit'
-require 'temp/lz77'
+require_relative 'lz77'
 
 class LZ77Test < Test::Unit::TestCase
 	def setup
@@ -12,7 +12,7 @@ class LZ77Test < Test::Unit::TestCase
 		result = @compressor.compress(@textData)
 		assert_equal(@encodedTextData, result)
 	end
-	
+
 	def testDecompress
 		result = @compressor.decompress(@encodedTextData)
 		assert_equal(@textData, result)
