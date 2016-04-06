@@ -56,7 +56,7 @@ I've lately had success building the project using the following:
 - Ruby 2.0.0p481
 - Erlang/OTP 17
 
-Oh, and by the way, my shell have slashes that title "the right way" (/).
+Oh, and by the way, my shell have slashes that slant "the right way" (/).
 
 ## Contributing
 
