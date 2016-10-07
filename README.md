@@ -19,6 +19,15 @@ implementations for the following languages:
 - Ruby
 - Erlang
 
+### Language wish-list
+
+- Go
+- OCaml
+- Haskell
+- Clojure
+- Swift
+- ObjectiveC
+
 > Are you missing a language? Please get involved and contribute!
 
 ## Getting started
