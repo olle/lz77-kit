@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 /*
  * The MIT License
  * 
@@ -64,11 +66,39 @@ public class LZ77 {
 		maxWindowLength = maxStringDistance + minStringLength;
 	}
 
+	// MAIN METHOD
+	
+	public static void main(String[] args) {
+		
+		if (Objects.isNull(args)) {
+			printUsageToStdErr();
+			return;
+		}
+		
+		if (args.length < 1 || args.length > 2) {
+			printUsageToStdErr();
+			return;
+		}
+		
+		if (args.length == 2 && !args[0].equals("-d")) {
+			printUsageToStdErr();
+			return;
+		} else if (args.length == 2) { 
+			System.out.println(LZ77.compressStr(args[1]));
+			return;
+		}
+		
+		System.out.println(LZ77.compressStr(args[0]));		
+	}
+
+	private static void printUsageToStdErr() {
+		System.err.println("Usage: LZ77 [-d] data   (-d == decompress)");
+	}
 
 	// LAZY STATIC METHODS - ADDED BY: DAN!
 	public static String compressStr(String data) {
 		LZ77 lz = new LZ77();
-		return lz.compress(data, null);
+		return lz.compress(data);
 	}
 	public static String decompressStr(String data) {
 		LZ77 lz = new LZ77();
