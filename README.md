@@ -1,10 +1,10 @@
 LZ77 Kit
 ========
 
-The lz77-kit is aimed at being another tool in the web-mans tool belt, enabling
-a simple and very pragmatic compression utility for various languages. It's
-perhaps not the sharpest compression-knife for heavy-duty cutting, but may
-suite some craft(wo)mens needs.
+The lz77-kit is aimed at being another tool in the web-persons tool belt,
+enabling a simple and very pragmatic compression utility for various languages.
+It's perhaps not the sharpest compression-knife for heavy-duty cutting, but may
+suite some craft-peoples needs.
 
 This could be a simple way for you to throttle down on some of that bandwidth
 usage, at least a few bytes or so. And a byte saved is a byte earned!
@@ -17,7 +17,7 @@ implementations for the following languages:
 - Python
 - Java
 - Ruby
-- Erlang
+- Erlang (ahem... maybe not quite there yet)
 
 ### Language wish-list
 
@@ -27,6 +27,8 @@ implementations for the following languages:
 - Clojure
 - Swift
 - ObjectiveC
+- Rust
+- C
 
 > Are you missing a language? Please get involved and contribute!
 
@@ -34,9 +36,10 @@ implementations for the following languages:
 
 1. Get the project source code
 2. Go to the project directory
-3. Test and build using [Ant](http://ant.apache.org) on the comand line.
+3. Test and build using [Ant](http://ant.apache.org) on the command line.
 
-To build and test all the current LZ77 implementation use the default build target:
+To build and test all the current LZ77 implementation use the default build
+target:
 
     shell$> ant
     
@@ -45,7 +48,8 @@ For more build information and project build targets, you may run:
     shell$> ant -p
 
 Look in the `./output` folder for the built artifacts and copy/paste what you
-need. Please keep the license and credits in any generated source code or scripts.
+need. Please keep the license and credits in any generated source code or
+scripts.
 
 Thank you!
 
